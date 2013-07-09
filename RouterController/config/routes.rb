@@ -1,12 +1,10 @@
 RouterController::Application.routes.draw do
-  #resources :users
-  get 'users' => 'users#index'
-  post 'users' => 'users#create'
-  get 'users/new' => 'users#new'
-  get 'users/:id/edit' => 'users#edit'
-  get 'users/:id' => 'users#show'
-  put 'users/:id' => 'users#update'
-  delete 'users/:id' => 'users#destroy'
+  resource :user
+  put 'users/login' => 'users#login'
+
+  resources :favorites, :only => [:index, :update]
+  resources :contacts
+
 
 
   # The priority is based upon order of creation:

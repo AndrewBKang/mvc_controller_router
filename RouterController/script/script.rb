@@ -2,16 +2,17 @@ require 'addressable/uri'
 require 'rest-client'
 require 'json'
 
-user = {:user=>{:email => 'james@gmail.com'}}
-#:name => 'michael',
+fave = {:user=>{:favorite => true}}
+user = {:user => {:email => 'stab@gmail.com'}}
+contact = {:contact =>{:favorite => true}}
 
-query = {:user => {:name => "mike"} }
+
 url = Addressable::URI.new(
   scheme: 'http',
   host: 'localhost',
   port: 3000,
-  path: '/users/4.json',
-#  query_values: query
+  path: 'contacts.json',
+  #query_values: {"token"=>"NPHr57syxHFqu5zZ0h6RBA=="}
 ).to_s
 
-p JSON.parse(RestClient.delete(url))
+p JSON.parse(RestClient.get(url))

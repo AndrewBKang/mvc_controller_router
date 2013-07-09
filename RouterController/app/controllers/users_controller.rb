@@ -1,9 +1,6 @@
 class UsersController < ApplicationController
 
-  def index
-    #render :json => {'key_to_index'=>"I'm in the index action!"}.to_json
-    render :json => User.all
-  end
+  skip_before_filter :create, :login
 
   def create
     user = User.new(params[:user])
@@ -14,32 +11,43 @@ class UsersController < ApplicationController
     end
   end
 
+  def login
+    user = User.find_by_email(params[:user][:email])
+    if user
+      user_token = SecureRandom.base64
+      User.update(user.id, {:token => user_token})
+      render :json => {:token => user_token}
+    else
+      'boo'
+    end
+  end
+
   def show
-    user = User.find_by_id(params[:id])
+    user = User.find(current_user)
     if user
       render :json => user
     else
-      render :json => 'user not found'
+      render :json => {:error => 'user not found'}
     end
   end
 
   def update
-    user = User.find_by_id(params[:id])
+    user = User.find(current_user)
     if user
-      user = User.update(params[:id], params[:user])
+      user = User.update(current_user, params[:user])
       render :json => user
     else
-      render :json => 'user not found'
+      render :json => {:error => 'user not found'}
     end
   end
 
   def destroy
-    user = User.find_by_id(params[:id])
+    user = User.find(current_user)
     if user
-      User.destroy(params[:id])
-      render :json => 'user destroyed'
+      User.destroy(current_user)
+      render :json => {:success => 'user destroyed'}
     else
-      render :json => 'user not found'
+      render :json => {:error => 'user not found'}
     end
   end
 

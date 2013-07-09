@@ -12,11 +12,12 @@ class UsersController < ApplicationController
   end
 
   def login
-    user = User.find_by_email(params[:user][:email])
+    user = User.find_by_email(params[:email])
+    render :json => user
     if user
       user_token = SecureRandom.base64
       User.update(user.id, {:token => user_token})
-      render :json => {:token => user_token}
+      render :json => [user_token, user.id]
     else
       'boo'
     end

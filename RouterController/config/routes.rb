@@ -1,6 +1,6 @@
 RouterController::Application.routes.draw do
   resource :user
-  put 'users/login' => 'users#login'
+  post 'user/login' => 'users#login'
 
   resources :favorites, :only => [:index, :update]
   resources :contacts
